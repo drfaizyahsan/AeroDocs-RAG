@@ -2,6 +2,12 @@
 
 Retrieve instructions from aircraft maintenance manual for a given query
 
+## ollama requirements
+- make sure ollama has the mentioned model and is running
+- ollama pull model_name
+- ollama serve
+- after usage
+- ollama rm model_name
 
 ## start unvicorn 
 `uvicorn api.main:app --reload`
