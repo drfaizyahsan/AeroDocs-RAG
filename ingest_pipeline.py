@@ -38,6 +38,7 @@ def split_into_chunks(text_series: pd.Series)->pd.Series:
         )
     )
 
+# TODO: read all md files instead of just one
 # df = spark.read.text("./aircraft_amm_mock/ATA_*.md")
 df = spark.read.text("./aircraft_amm_mock/ATA_21_AirConditioning_Pack_Removal.md")
 print(df.count())

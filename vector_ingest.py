@@ -1,6 +1,7 @@
 import hashlib
 from pyspark.sql import SparkSession
 from sentence_transformers import SentenceTransformer
+import chromadb
 
 spark = (
     SparkSession.builder
@@ -9,6 +10,7 @@ spark = (
     .config("spark.sql.execution.arrow.pyspark.enabled", "true")
     .getOrCreate()
 )
+
 
 def generate_chunk_id(chunk_index: int)->str:
     """
@@ -28,6 +30,14 @@ print(chunked_df.count())
 # initialize embedding model
 embedding_model = SentenceTransformer(
     "sentence-transformers/all-MiniLM-L6-v2"
+)
+
+# initialize ChromaDB
+client = chromadb.PersistentClient(
+    path="./chromadb"
+)
+collection = client.get_or_create_collection(
+    name="aircraft_manuals"
 )
 
 # convert spark df to pandas batches
@@ -53,7 +63,20 @@ for start in range(0, len(chunked_pandas), batch_size):
 
     print(ids)
 
-    break
+    # TODO: metadata
+
+    # insert in chroma
+    collection.add(
+        ids=ids,
+        documents=documents,
+        embeddings=embeddings,
+    )
+
+    print(f"Inserted batch: {start}--{start+len(batch)}")
+
+print("vector ingestion completed")
+print(f"Total vectors in chroma: {collection.count()}")
+spark.stop()
 
 
 
