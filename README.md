@@ -21,3 +21,13 @@ http://localhost:8000/api/v1/query \
 "question": "How do I inspect the bleed air valve?"
 }'
 ```
+
+## TODO
+- optimize folder structure
+- complete TODOs inside the code
+- replace print with logging
+- set up a cicd pipeline
+- containerize
+- make more scalable
+- add test cases for both easy and hard paths
+- keep improving
